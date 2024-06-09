@@ -8,6 +8,9 @@ export default defineNuxtConfig({
     shim: false
   },
   devtools: { enabled: false },
-  modules: ["@nuxt/ui", "@nuxt/image"]
+  modules: ["@nuxt/ui", "@nuxt/image",'@pinia/nuxt'],
+  pinia:{
+    storesDirs:['./store/**']
+  }
 
 })
