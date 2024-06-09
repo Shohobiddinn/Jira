@@ -62,24 +62,24 @@ export const tabs = [
 	},
 ]
 
-// export const templates = [
-// 	{
-// 		name: 'Scrum',
-// 		image: '/scrum.svg',
-// 	},
-// 	{
-// 		name: 'Kanban',
-// 		image: '/documents.svg',
-// 	},
-// 	{
-// 		name: 'Bug tracking',
-// 		image: '/bug.svg',
-// 	},
-// 	{
-// 		name: 'DevOps',
-// 		image: '/devops.svg',
-// 	},
-// ]
+export const templates = [
+	{
+		name: 'Scrum',
+		image: '/scrum.svg',
+	},
+	{
+		name: 'Kanban',
+		image: '/documents.svg',
+	},
+	{
+		name: 'Bug tracking',
+		image: '/bug.svg',
+	},
+	{
+		name: 'DevOps',
+		image: '/devops.svg',
+	},
+]
 
 // export const sidebarItems = [
 // 	{
