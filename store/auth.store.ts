@@ -1,3 +1,5 @@
+import { defineStore } from 'pinia'
+
 interface User {
     email: string;
     password: string;
@@ -5,7 +7,7 @@ interface User {
     status: boolean;
 }
 
-const initialState : {user:User} = {
+const initialState: { user: User } = {
     user: {
         email: '',
         password: '',
@@ -15,6 +17,17 @@ const initialState : {user:User} = {
 }
 
 
-export const useAuthStore = defineStore("auth",{
-    state: ()=> initialState
+export const useAuthStore = defineStore("auth", {
+    state: () => initialState,
+    getters: {
+        currentUser: state => state.user
+    },
+    actions: {
+        set(user: User) {
+            this.$patch(user)
+        },
+        clear() {
+            this.$patch(initialState)
+        }
+    }
 })
