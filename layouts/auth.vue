@@ -1,0 +1,7 @@
+
+
+<template>
+  <LayoutsMainNavbar />
+
+  <NuxtPage />
+</template> 
