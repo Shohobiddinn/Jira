@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 definePageMeta({ layout: "auth" });
-useHead({ title: "Auth | Jira software" });
+useHead({ title: "Auth | Jira" });
 
 const router = useRouter();
 
