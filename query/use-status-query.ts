@@ -26,9 +26,9 @@ export const useStatusQuery = () => {
                         status: deal.status,
                         $id: deal.$id,
                     })
-
                 }
             }
+            return newBoard
         },
     })
 }
