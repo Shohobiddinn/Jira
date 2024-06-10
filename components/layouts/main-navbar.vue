@@ -1,7 +1,18 @@
 <script setup lang="ts">
-import { useAuthStore } from '../../store/auth.store';
-const { currentUser } = useAuthStore()
+import { ACCOUNT } from '~/libs/appwrite';
+import { useAuthStore } from '~/store/auth.store';
+import { useLoadingStore } from '~/store/loading.store';
+const { currentUser,clear } = useAuthStore()
+const router = useRouter()
+const loadingStore = useLoadingStore();
 
+const logout = async () => {
+  loadingStore.set(true)
+	await ACCOUNT.deleteSession('current')
+	clear()
+	router.push('/auth')
+  loadingStore.set(false)
+}
 
 </script>
 
@@ -15,7 +26,7 @@ const { currentUser } = useAuthStore()
       <div class="flex items-center space-x-2">
         <SharedColorMode />
         <template v-if="currentUser.status">
-          <UButton color="red" variant="outline" class="font-bold">Log out</UButton>
+          <UButton color="red" variant="outline" class="font-bold" @click="logout">Log out</UButton>
           <NuxtLink to="/documents">
             <UButton color="blue" variant="outline">Documents</UButton>
           </NuxtLink>

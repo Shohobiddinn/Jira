@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ACCOUNT } from '~/libs/appwrite';
+import { useLoadingStore } from '~/store/loading.store';
 
 
 definePageMeta({ layout: "auth" });
@@ -7,10 +8,12 @@ useHead({ title: "Jira | Auth" });
 const router = useRouter();
 
 const isLogin = ref(true);
-
+const loadingStore = useLoadingStore()
 onMounted(() => {
   ACCOUNT.get().then(() => {
     router.push('/')
+  }).finally(() => {
+    loadingStore.set(false);
   })
 })
 
