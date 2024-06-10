@@ -4,7 +4,7 @@
 	>
 		<div class="flex items-center space-x-2 pr-4">
 			<SharedColorMode />
-			<!-- <SharedUserBox /> -->
+			<SharedUserBox />
 		</div>
 	</div>
 </template>

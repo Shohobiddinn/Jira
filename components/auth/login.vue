@@ -68,8 +68,14 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       Siz registratsadan o'tmaganmisiz ?
       <span class="text-blue-500 underline" role="button" @click="$props.toggleLogin">Sign up</span>
     </div>
-    <UButton type="submit" class="mt-2" color="blue" block size="lg">
-      Submit
+    <UButton type="submit" class="mt-2" color="blue" block size="lg" :disabled="isLoading">
+      <template v-if="isLoading">
+        <Icon name="svg-spinners:3-dots-fade" class="w-5 h-5" />
+      </template>
+      <template v-else>
+        Submit
+      </template>
+
     </UButton>
   </UForm>
 </template>
