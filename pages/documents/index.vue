@@ -6,6 +6,7 @@ import { useAuthStore } from '~/store/auth.store';
 import { useStatusQuery } from '~/query/use-status-query';
 import { useMutation } from '@tanstack/vue-query';
 import type { IColumn, IDeal } from '~/types';
+import { useCurrentDealStore } from '~/store/current-deal.store';
 
 definePageMeta({ layout: 'documents' })
 const loadingStore = useLoadingStore()
@@ -22,6 +23,7 @@ onMounted(() => {
         })
     }).catch(() => router.push('/auth'))
 })
+const { set } = useCurrentDealStore()
 const { data, isLoading, refetch } = useStatusQuery()
 const dragCardRef = ref<IDeal | null>(null)
 const sourceColumnRef = ref<IColumn | null>(null)
@@ -46,7 +48,6 @@ const handleDrop = (column: IColumn) => {
         mutate({ docId: dragCardRef.value.$id, status: column.id })
     }
 }
-console.log(isMoving.value);
 
 </script>
 
@@ -64,7 +65,7 @@ console.log(isMoving.value);
     </div>
     <div class="grid grid-cols-4 gap-2 mt-12" v-else>
         <div class="px-1"
-            :class="{ 'border-l-2 border-r-2 border-dotted h-screen dark:border-gray-900 border-gray-200 ' : isMoving}"
+            :class="{ 'border-l-2 border-r-2 border-dotted h-screen dark:border-gray-900 border-gray-200 ': isMoving }"
             @dragover="handleDragOver" @drop="() => handleDrop(item)" v-for="(item, index) in data" :key="index">
             <UButton class="w-full h-12" color="blue" variant="outline">
                 <div class="flex items-center space-x-2">
@@ -73,8 +74,9 @@ console.log(isMoving.value);
                 </div>
             </UButton>
             <SharedCreateDeal :status="item.id" :refetch="refetch" />
-            <div class="my-3 dark:bg-gray-900 bg-gray-100 rounded-md p-2 animation" :class="{'opacity-50' : isPending}" v-for="deal in item.items"
-                :key="deal.$id" role="button" draggable="true" @dragstart="() => handleDragStart(deal, item)">
+            <div class="my-3 dark:bg-gray-900 bg-gray-100 rounded-md p-2 animation"
+                :class="{ 'opacity-50 cursor-not-allowed': isPending }" v-for="deal in item.items" :key="deal.$id"
+                role="button" draggable="true" @dragstart="() => handleDragStart(deal, item)" @click="set(deal)">
                 <div class="flex items-center space-x-2" role="button">
                     <span class="font-bold text-lg uppercase">{{ deal.name }}</span>
                 </div>
@@ -86,6 +88,7 @@ console.log(isMoving.value);
                 </div>
             </div>
         </div>
+        <Slideover />
     </div>
 
 </template>
