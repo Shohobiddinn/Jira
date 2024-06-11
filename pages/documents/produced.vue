@@ -22,8 +22,8 @@ const handleDelete = (id: string) =>{
 
 <template>
 	<div class="flex items-center justify-between">
-		<h1 class="text-4xl font-bold">To Do</h1>
-		<SharedCreateDeal :status="EnumStatus.todo" :refetch="refetch" />
+		<h1 class="text-4xl font-bold">Produced</h1>
+		<SharedCreateDeal :status="EnumStatus.produced" :refetch="refetch" />
 	</div>
 
 	<UDivider class="my-2" />
