@@ -4,10 +4,8 @@ import { useDeals } from '~/query/use-deals'
 import { useDelete } from '~/query/use-delete';
 import { EnumStatus } from '~/types'
 import { useEditDealStore } from '~/store/edit-deal.store';
-
 definePageMeta({ layout: 'documents' })
 useHead({ title: 'In-Progress | Jira software' })
-
 const { set } = useCurrentDealStore()
 const { data, isLoading, refetch } = useDeals(EnumStatus['in-progress'])
 const {isDeleting,deleteDeal} = useDelete(refetch)
