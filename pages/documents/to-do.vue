@@ -1,63 +1,112 @@
 <script setup lang="ts">
-import { useDeals } from '~/query/use-deals';
-import { EnumStatus } from '~/types';
-import { useCurrentDealStore } from '~/store/current-deal.store';
-import { Slideover } from '../../.nuxt/components';
+import { useCurrentDealStore } from '@/store/current-deal.store'
+import { useDeals } from '~/query/use-deals'
+import { useDelete } from '~/query/use-delete';
+import { EnumStatus } from '~/types'
+import { useEditDealStore } from '~/store/edit-deal.store';
 
 definePageMeta({ layout: 'documents' })
-useHead({ title: 'To Do | Jira' })
+useHead({ title: 'To Do | Jira software' })
 
 const { set } = useCurrentDealStore()
-const { data, refetch, isLoading } = useDeals(EnumStatus.todo)
+const { data, isLoading, refetch } = useDeals(EnumStatus.todo)
+const {isDeleting,deleteDeal} = useDelete(refetch)
+const editDeal = useEditDealStore()
+const handleDelete = (id: string) =>{
+    const confirm = window.confirm('Dealni o\'chirmoqchimisiz')
+    if(confirm){
+        deleteDeal(id)
+    }
+}
 </script>
+
 <template>
-    <div class="flex items-center justify-between">
-        <h1 class="text-4xl font-bold">To Do</h1>
-        <SharedCreateDeal status="to-do" :refetch="refetch" />
-    </div>
-    <UDivider />
-    <div class=" grid grid-cols-4 gap-2" v-if="!isLoading">
-        <div class="my-3 dark:bg-gray-900 bg-gray-300 rounded-md p-2 animation"
-            v-for="(item, index) in Array.from({ length: 4 })" :key="index">
-            <USkeleton class="w-10/12 h-4" />
-            <USkeleton class="w-full h-1 my-3" />
-            <USkeleton class="w-full h-8" />
-            <USkeleton class="w-full h-6 mt-3" />
-        </div>
-    </div>
-    <div class=" grid grid-cols-4 gap-2" v-else>
-        <div v-if="data?.length">
+	<div class="flex items-center justify-between">
+		<h1 class="text-4xl font-bold">To Do</h1>
+		<SharedCreateDeal :status="EnumStatus.todo" :refetch="refetch" />
+	</div>
 
-            <div class="my-3 dark:bg-gray-900 bg-gray-100 rounded-md p-2 animation" v-for="(deal, index) in data"
-                :key="index" role="button" @click="set(deal)">
-                <div class="flex items-center space-x-2" role="button">
-                    <span class="font-bold text-lg uppercase">{{ deal.name }}</span>
-                </div>
+	<UDivider class="my-2" />
 
-                <UDivider class="my-3" />
+	<div class="grid grid-cols-4 gap-2" v-if="isLoading">
+		<div
+			class="my-3 dark:bg-gray-900 bg-gray-300 rounded-md p-2 animation"
+			v-for="(item, index) in Array.from({ length: 4 })"
+			:key="index"
+		>
+			<USkeleton class="w-10/12 h-4" />
+			<USkeleton class="w-full h-1 my-3" />
+			<USkeleton class="w-full h-8" />
+			<USkeleton class="w-full h-6 mt-3" />
+		</div>
+	</div>
 
-                <div class="opacity-55 text-sm line-clamp-1">
-                    {{ deal.description }}
-                </div>
-            </div>
-        </div>
-    </div>
-    <Slideover />
+	<div v-else>
+		<div v-if="data?.length">
+			<div class="grid grid-cols-4 gap-2">
+				<div
+					class="my-3 dark:bg-gray-900 bg-gray-100 rounded-md p-2 animation"
+					v-for="(item, index) in data"
+					:key="item.$id"
+				>
+					<div
+						class="flex items-center space-x-2"
+						role="button"
+						@click="set(item)"
+					>
+						<span class="font-bold text-lg uppercase">{{ item.name }}</span>
+					</div>
+
+					<UDivider class="my-3" />
+
+					<div class="opacity-55 text-sm line-clamp-1">
+						{{ item.description }}
+					</div>
+
+					<div class="grid grid-cols-2 gap-2 mt-2">
+						<UButton block color="blue" @click="editDeal.set(item)">
+							Edit
+						</UButton>
+						<UButton
+							block
+							color="red"
+                            @click="handleDelete(item.$id)"
+                            :disabled="isDeleting"
+						>
+                        <template v-if="isDeleting"> <Icon name="svg-spinners:3-dots-scale" /> </template>
+                        <template v-else> Delete </template>
+
+							
+						</UButton>
+					</div>
+				</div>
+
+				<Slideover />
+				<SharedEditDeal :refetch="refetch" />
+			</div>
+		</div>
+
+		<div v-else>
+			<div class="flex flex-col items-center justify-center">
+				<NuxtImg src="/no-data.svg" width="300" height="300" />
+			</div>
+		</div>
+	</div>
 </template>
+
 <style scoped>
 @keyframes show {
-    from {
-        transform: scale(0.5) translateY(-30px);
-        opacity: 0.4
-    }
-
-    to {
-        transform: scale(1) translateY();
-        opacity: 1;
-    }
+	from {
+		transform: scale(0.5) translateY(-30px);
+		opacity: 0.4;
+	}
+	to {
+		transform: scale(1) translateY(0);
+		opacity: 1;
+	}
 }
 
 .animation {
-    animation: show 0.3s ease-in-out;
+	animation: show 0.3s ease-in-out;
 }
 </style>
